@@ -1,0 +1,193 @@
+.grids {
+  margin: auto;
+  width: 1300px;
+}
+
+#user-grid,
+#computer-grid {
+  display: inline-block;
+  height: 600px;
+  width: 600px;
+}
+
+.grid-element {
+  &.hidden {
+    background-color: transparent;
+    span {
+      display: none;
+    }
+  }
+}
+
+.player-info {
+  clear: both;
+  float: left;
+  margin: 20px;
+
+  &.hidden {
+    display: none;
+  }
+}
+
+.options {
+  float: left;
+  margin: 10px;
+
+  input[type=radio] {
+    width: 2em;
+    margin: 0;
+    padding: 0;
+    font-size: 1em;
+    opacity: 0;
+  }
+
+  input[type=radio] + label {
+    display: inline-block;
+    margin-left: -2em;
+    line-height: 1.5em;
+  }
+
+  input[type=radio] + label > span {
+    display: inline-block;
+    width: 0.875em;
+    height: 0.875em;
+    margin: 0.25em 0.5em 0.25em 0.25em;
+    border: 0.0625em solid rgb(192,192,192);
+    border-radius: 0.25em;
+    background: rgb(224,224,224);
+    background-image: linear-gradient(to bottom, rgb(240,240,240) 50%, rgb(224,224,224) 100%);
+    vertical-align: bottom;
+  }
+
+  input[type=radio]:checked + label > span {
+    background-image: linear-gradient(to bottom, rgb(224,224,224) 50%, rgb(240,240,240) 100%);
+  }
+
+  input[type=radio]:checked + label > span > span {
+    display: block;
+    width: 0.5em;
+    height: 0.5em;
+    margin: 0.125em;
+    border: 0.0625em solid rgb(115,153,77);
+    border-radius: 0.125em;
+    background: rgb(153,204,102);
+    background-image: linear-gradient(to bottom, rgb(179,217,140) 50%, rgb(0,0,0) 100%);
+  }
+}
+
+.grid-element {
+  float: left;
+  height: 50px;
+  width: 50px;
+  border: 1px solid #d2d2d2;
+  position: relative;
+
+  &.carrier {
+    background-color: green;
+  }
+
+  &.battleship {
+    background-color: red;
+  }
+
+  &.cruiser {
+    background-color: blue;
+  }
+
+  &.destroyer {
+    background-color: yellow;
+  }
+
+  &.submarine {
+    background-color: black;
+  }
+
+  &.not-sunk, &.hidden {
+    background-color: white;
+  }
+
+  .x,
+  .dot {
+    display: block;
+    position: relative;
+  }
+
+  .x::after,
+  .dot::after {
+    bottom: 0;
+    color: #000100;
+    content: "\274c";
+    font-size: 20px;
+    left: 0;
+    line-height: 20px;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    top: 16px;
+  }
+
+  .hit::after {
+    color: purple;
+  }
+
+  .x::after {
+    content: "\274c";
+  }
+
+  .dot::after {
+    content: "\2022";
+  }
+
+  &.grid-num {
+    border-right: 3px solid #d2d2d2;
+  }
+
+  &.grid-letter {
+    border-bottom: 3px solid #d2d2d2;
+  }
+
+  &.grid-letter,
+  &.grid-num {
+    span {
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  &:not(.grid-num) {
+    &:not(.grid-letter) {
+      cursor: pointer;
+    }
+  }
+}
+
+.confirmation {
+  float: left;
+  width: 150px;
+  margin: 13% 0 0 5%;
+  position: fixed;
+
+  &.hidden {
+    display: none;
+  }
+}
+
+.button {
+  background-color: #000;
+  border: 2px solid #000;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 16px;
+  padding: 8px 20px;
+  text-align: center;
+  text-decoration: none;
+  transition-duration: 0.4s;
+}
+
+.button:hover {
+  background-color: #fff;
+  color: #000;
+}

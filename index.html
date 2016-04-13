@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Battleship</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="js/helper.js" defer></script>
+    <script type="text/javascript" src="js/computerAI.js" defer></script>
+    <script type="text/javascript" src="js/main.js" defer></script>
+  </head>
+
+  <body>
+  
+    <div class="options">
+      <form>
+        <input id="pvp" type="radio" name="game-type" value="PvP" onchange="changeGameType(this.value)">
+        <label for="pvp"><span><span></span></span>Player vs. Player</label>
+        <input id="pvc" type="radio" name="game-type" value="PvC" checked onchange="changeGameType(this.value)">
+        <label for="pvc"><span><span></span></span>Player vs. Computer</label>
+      </form>
+    </div>
+
+    <p class='player-info player1 hidden'>Player 1 turn</p>
+
+    <div class="confirmation hidden">
+      <span></span>
+      <button class="button" type="button" onclick="confirmShip();">Confirm</button>
+    </div>
+
+    <div class="grids">
+      <div id="user-grid">
+        <div class="grid-element grid-letter grid-num" id="0-0">
+          <span></span>
+        </div>
+        
+        <div class="grid-element grid-letter 0-A">
+          <span>A</span>
+        </div>
+
+        <div class="grid-element grid-letter 0-B">
+          <span>B</span>
+        </div>
+
+        <div class="grid-element grid-letter 0-C">
+          <span>C</span>
+        </div>
+
+        <div class="grid-element grid-letter 0-D">
+          <span>D</span>
+        </div>
+
+        <div class="grid-element grid-letter 0-E">
+          <span>E</span>
+        </div>
+
+        <div class="grid-element grid-letter 0-F">
+          <span>F</span>
+        </div>
+
+        <div class="grid-element grid-letter 0-G">
+          <span>G</span>
+        </div>
+
+        <div class="grid-element grid-letter 0-H">
+          <span>H</span>
+        </div>
+
+        <div class="grid-element grid-letter 0-I">
+          <span>I</span>
+        </div>
+
+        <div class="grid-element grid-letter 0-J">
+          <span>J</span>
+        </div>
+
+        <div class="grid-element grid-num 1-0">
+          <span>1</span>
+        </div>
+
+        <div class="grid-element 1-A">
+        </div>
+
+        <div class="grid-element 1-B">
+        </div>
+
+        <div class="grid-element 1-C">
+        </div>
+
+        <div class="grid-element 1-D">
+        </div>
+
+        <div class="grid-element 1-E">
+        </div>
+
+        <div class="grid-element 1-F">
+        </div>
+
+        <div class="grid-element 1-G">
+        </div>
+
+        <div class="grid-element 1-H">
+        </div>
+
+        <div class="grid-element 1-I">
+        </div>
+
+        <div class="grid-element 1-J">
+        </div>
+
+        <div class="grid-element grid-num 2-0">
+          <span>2</span>
+        </div>
+
+        <div class="grid-element 2-A">
+        </div>
+
+        <div class="grid-element 2-B">
+        </div>
+
+        <div class="grid-element 2-C">
+        </div>
+
+        <div class="grid-element 2-D">
+        </div>
+
+        <div class="grid-element 2-E">
+        </div>
+
+        <div class="grid-element 2-F">
+        </div>
+
+        <div class="grid-element 2-G">
+        </div>
+
+        <div class="grid-element 2-H">
+        </div>
+
+        <div class="grid-element 2-I">
+        </div>
+
+        <div class="grid-element 2-J">
+        </div>
+
+        <div class="grid-element grid-num 3-0">
+          <span>3</span>
+        </div>
+
+        <div class="grid-element 3-A">
+        </div>
+
+        <div class="grid-element 3-B">
+        </div>
+
+        <div class="grid-element 3-C">
+        </div>
+
+        <div class="grid-element 3-D">
+        </div>
+
+        <div class="grid-element 3-E">
+        </div>
+
+        <div class="grid-element 3-F">
+        </div>
+
+        <div class="grid-element 3-G">
+        </div>
+
+        <div class="grid-element 3-H">
+        </div>
+
+        <div class="grid-element 3-I">
+        </div>
+
+        <div class="grid-element 3-J">
+        </div>
+
+        <div class="grid-element grid-num 4-0">
+          <span>4</span>
+        </div>
+
+        <div class="grid-element 4-A">
+        </div>
+
+        <div class="grid-element 4-B">
+        </div>
+
+        <div class="grid-element 4-C">
+        </div>
+
+        <div class="grid-element 4-D">
+        </div>
+
+        <div class="grid-element 4-E">
+        </div>
+
+        <div class="grid-element 4-F">
+        </div>
+
+        <div class="grid-element 4-G">
+        </div>
+
+        <div class="grid-element 4-H">
+        </div>
+
+        <div class="grid-element 4-I">
+        </div>
+
+        <div class="grid-element 4-J">
+        </div>
+
+        <div class="grid-element grid-num 5-0">
+          <span>5</span>
+        </div>
+
+        <div class="grid-element 5-A">
+        </div>
+
+        <div class="grid-element 5-B">
+        </div>
+
+        <div class="grid-element 5-C">
+        </div>
+
+        <div class="grid-element 5-D">
+        </div>
+
+        <div class="grid-element 5-E">
+        </div>
+
+        <div class="grid-element 5-F">
+        </div>
+
+        <div class="grid-element 5-G">
+        </div>
+
+        <div class="grid-element 5-H">
+        </div>
+
+        <div class="grid-element 5-I">
+        </div>
+
+        <div class="grid-element 5-J">
+        </div>
+
+        <div class="grid-element grid-num 6-0">
+          <span>6</span>
+        </div>
+
+        <div class="grid-element 6-A">
+        </div>
+
+        <div class="grid-element 6-B">
+        </div>
+
+        <div class="grid-element 6-C">
+        </div>
+
+        <div class="grid-element 6-D">
+        </div>
+
+        <div class="grid-element 6-E">
+        </div>
+
+        <div class="grid-element 6-F">
+        </div>
+
+        <div class="grid-element 6-G">
+        </div>
+
+        <div class="grid-element 6-H">
+        </div>
+
+        <div class="grid-element 6-I">
+        </div>
+
+        <div class="grid-element 6-J">
+        </div>
+
+        <div class="grid-element grid-num 7-0">
+          <span>7</span>
+        </div>
+
+        <div class="grid-element 7-A">
+        </div>
+
+        <div class="grid-element 7-B">
+        </div>
+
+        <div class="grid-element 7-C">
+        </div>
+
+        <div class="grid-element 7-D">
+        </div>
+
+        <div class="grid-element 7-E">
+        </div>
+
+        <div class="grid-element 7-F">
+        </div>
+
+        <div class="grid-element 7-G">
+        </div>
+
+        <div class="grid-element 7-H">
+        </div>
+
+        <div class="grid-element 7-I">
+        </div>
+
+        <div class="grid-element 7-J">
+        </div>
+
+        <div class="grid-element grid-num 8-0">
+          <span>8</span>
+        </div>
+
+        <div class="grid-element 8-A">
+        </div>
+
+        <div class="grid-element 8-B">
+        </div>
+
+        <div class="grid-element 8-C">
+        </div>
+
+        <div class="grid-element 8-D">
+        </div>
+
+        <div class="grid-element 8-E">
+        </div>
+
+        <div class="grid-element 8-F">
+        </div>
+
+        <div class="grid-element 8-G">
+        </div>
+
+        <div class="grid-element 8-H">
+        </div>
+
+        <div class="grid-element 8-I">
+        </div>
+
+        <div class="grid-element 8-J">
+        </div>
+
+        <div class="grid-element grid-num 9-0">
+          <span>9</span>
+        </div>
+
+        <div class="grid-element 9-A">
+        </div>
+
+        <div class="grid-element 9-B">
+        </div>
+
+        <div class="grid-element 9-C">
+        </div>
+
+        <div class="grid-element 9-D">
+        </div>
+
+        <div class="grid-element 9-E">
+        </div>
+
+        <div class="grid-element 9-F">
+        </div>
+
+        <div class="grid-element 9-G">
+        </div>
+
+        <div class="grid-element 9-H">
+        </div>
+
+        <div class="grid-element 9-I">
+        </div>
+
+        <div class="grid-element 9-J">
+        </div>
+
+        <div class="grid-element grid-num 10-0">
+          <span>10</span>
+        </div>
+
+        <div class="grid-element 10-A">
+        </div>
+
+        <div class="grid-element 10-B">
+        </div>
+
+        <div class="grid-element 10-C">
+        </div>
+
+        <div class="grid-element 10-D">
+        </div>
+
+        <div class="grid-element 10-E">
+        </div>
+
+        <div class="grid-element 10-F">
+        </div>
+
+        <div class="grid-element 10-G">
+        </div>
+
+        <div class="grid-element 10-H">
+        </div>
+
+        <div class="grid-element 10-I">
+        </div>
+
+        <div class="grid-element 10-J">
+        </div>
+      </div>
+    
+      <div id="computer-grid">
+        <div class="grid-element grid-letter grid-num 0-0">
+        </div>
+        
+        <div class="grid-element grid-letter 0-A">
+          <span>A</span>
+        </div>
+
+        <div class="grid-element grid-letter 0-B">
+          <span>B</span>
+        </div>
+
+        <div class="grid-element grid-letter 0-C">
+          <span>C</span>
+        </div>
+
+        <div class="grid-element grid-letter 0-D">
+          <span>D</span>
+        </div>
+
+        <div class="grid-element grid-letter 0-E">
+          <span>E</span>
+        </div>
+
+        <div class="grid-element grid-letter 0-F">
+          <span>F</span>
+        </div>
+
+        <div class="grid-element grid-letter 0-G">
+          <span>G</span>
+        </div>
+
+        <div class="grid-element grid-letter 0-H">
+          <span>H</span>
+        </div>
+
+        <div class="grid-element grid-letter 0-I">
+          <span>I</span>
+        </div>
+
+        <div class="grid-element grid-letter 0-J">
+          <span>J</span>
+        </div>
+
+        <div class="grid-element grid-num 1-0">
+          <span>1</span>
+        </div>
+
+        <div class="grid-element 1-A">
+        </div>
+
+        <div class="grid-element 1-B">
+        </div>
+
+        <div class="grid-element 1-C">
+        </div>
+
+        <div class="grid-element 1-D">
+        </div>
+
+        <div class="grid-element 1-E">
+        </div>
+
+        <div class="grid-element 1-F">
+        </div>
+
+        <div class="grid-element 1-G">
+        </div>
+
+        <div class="grid-element 1-H">
+        </div>
+
+        <div class="grid-element 1-I">
+        </div>
+
+        <div class="grid-element 1-J">
+        </div>
+
+        <div class="grid-element grid-num 2-0">
+          <span>2</span>
+        </div>
+
+        <div class="grid-element 2-A">
+        </div>
+
+        <div class="grid-element 2-B">
+        </div>
+
+        <div class="grid-element 2-C">
+        </div>
+
+        <div class="grid-element 2-D">
+        </div>
+
+        <div class="grid-element 2-E">
+        </div>
+
+        <div class="grid-element 2-F">
+        </div>
+
+        <div class="grid-element 2-G">
+        </div>
+
+        <div class="grid-element 2-H">
+        </div>
+
+        <div class="grid-element 2-I">
+        </div>
+
+        <div class="grid-element 2-J">
+        </div>
+
+        <div class="grid-element grid-num 3-0">
+          <span>3</span>
+        </div>
+
+        <div class="grid-element 3-A">
+        </div>
+
+        <div class="grid-element 3-B">
+        </div>
+
+        <div class="grid-element 3-C">
+        </div>
+
+        <div class="grid-element 3-D">
+        </div>
+
+        <div class="grid-element 3-E">
+        </div>
+
+        <div class="grid-element 3-F">
+        </div>
+
+        <div class="grid-element 3-G">
+        </div>
+
+        <div class="grid-element 3-H">
+        </div>
+
+        <div class="grid-element 3-I">
+        </div>
+
+        <div class="grid-element 3-J">
+        </div>
+
+        <div class="grid-element grid-num 4-0">
+          <span>4</span>
+        </div>
+
+        <div class="grid-element 4-A">
+        </div>
+
+        <div class="grid-element 4-B">
+        </div>
+
+        <div class="grid-element 4-C">
+        </div>
+
+        <div class="grid-element 4-D">
+        </div>
+
+        <div class="grid-element 4-E">
+        </div>
+
+        <div class="grid-element 4-F">
+        </div>
+
+        <div class="grid-element 4-G">
+        </div>
+
+        <div class="grid-element 4-H">
+        </div>
+
+        <div class="grid-element 4-I">
+        </div>
+
+        <div class="grid-element 4-J">
+        </div>
+
+        <div class="grid-element grid-num 5-0">
+          <span>5</span>
+        </div>
+
+        <div class="grid-element 5-A">
+        </div>
+
+        <div class="grid-element 5-B">
+        </div>
+
+        <div class="grid-element 5-C">
+        </div>
+
+        <div class="grid-element 5-D">
+        </div>
+
+        <div class="grid-element 5-E">
+        </div>
+
+        <div class="grid-element 5-F">
+        </div>
+
+        <div class="grid-element 5-G">
+        </div>
+
+        <div class="grid-element 5-H">
+        </div>
+
+        <div class="grid-element 5-I">
+        </div>
+
+        <div class="grid-element 5-J">
+        </div>
+
+        <div class="grid-element grid-num 6-0">
+          <span>6</span>
+        </div>
+
+        <div class="grid-element 6-A">
+        </div>
+
+        <div class="grid-element 6-B">
+        </div>
+
+        <div class="grid-element 6-C">
+        </div>
+
+        <div class="grid-element 6-D">
+        </div>
+
+        <div class="grid-element 6-E">
+        </div>
+
+        <div class="grid-element 6-F">
+        </div>
+
+        <div class="grid-element 6-G">
+        </div>
+
+        <div class="grid-element 6-H">
+        </div>
+
+        <div class="grid-element 6-I">
+        </div>
+
+        <div class="grid-element 6-J">
+        </div>
+
+        <div class="grid-element grid-num 7-0">
+          <span>7</span>
+        </div>
+
+        <div class="grid-element 7-A">
+        </div>
+
+        <div class="grid-element 7-B">
+        </div>
+
+        <div class="grid-element 7-C">
+        </div>
+
+        <div class="grid-element 7-D">
+        </div>
+
+        <div class="grid-element 7-E">
+        </div>
+
+        <div class="grid-element 7-F">
+        </div>
+
+        <div class="grid-element 7-G">
+        </div>
+
+        <div class="grid-element 7-H">
+        </div>
+
+        <div class="grid-element 7-I">
+        </div>
+
+        <div class="grid-element 7-J">
+        </div>
+
+        <div class="grid-element grid-num 8-0">
+          <span>8</span>
+        </div>
+
+        <div class="grid-element 8-A">
+        </div>
+
+        <div class="grid-element 8-B">
+        </div>
+
+        <div class="grid-element 8-C">
+        </div>
+
+        <div class="grid-element 8-D">
+        </div>
+
+        <div class="grid-element 8-E">
+        </div>
+
+        <div class="grid-element 8-F">
+        </div>
+
+        <div class="grid-element 8-G">
+        </div>
+
+        <div class="grid-element 8-H">
+        </div>
+
+        <div class="grid-element 8-I">
+        </div>
+
+        <div class="grid-element 8-J">
+        </div>
+
+        <div class="grid-element grid-num 9-0">
+          <span>9</span>
+        </div>
+
+        <div class="grid-element 9-A">
+        </div>
+
+        <div class="grid-element 9-B">
+        </div>
+
+        <div class="grid-element 9-C">
+        </div>
+
+        <div class="grid-element 9-D">
+        </div>
+
+        <div class="grid-element 9-E">
+        </div>
+
+        <div class="grid-element 9-F">
+        </div>
+
+        <div class="grid-element 9-G">
+        </div>
+
+        <div class="grid-element 9-H">
+        </div>
+
+        <div class="grid-element 9-I">
+        </div>
+
+        <div class="grid-element 9-J">
+        </div>
+
+        <div class="grid-element grid-num 10-0">
+          <span>10</span>
+        </div>
+
+        <div class="grid-element 10-A">
+        </div>
+
+        <div class="grid-element 10-B">
+        </div>
+
+        <div class="grid-element 10-C">
+        </div>
+
+        <div class="grid-element 10-D">
+        </div>
+
+        <div class="grid-element 10-E">
+        </div>
+
+        <div class="grid-element 10-F">
+        </div>
+
+        <div class="grid-element 10-G">
+        </div>
+
+        <div class="grid-element 10-H">
+        </div>
+
+        <div class="grid-element 10-I">
+        </div>
+
+        <div class="grid-element 10-J">
+        </div>
+      </div>
+    </div>
+
+  </body>
+
+</html>

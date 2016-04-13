@@ -1,0 +1,29 @@
+{
+  "name": "first",
+  "version": "1.0.0",
+  "description": "first package",
+  "main": "main.js",
+  "dependencies": {},
+  "devDependencies": {
+    "browser-sync": "^2.11.1",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-sass": "^2.2.0"
+  },
+  "scripts": {
+    "test": "console.log('package test');"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matsepiol/battleship.git"
+  },
+  "keywords": [
+    "matsepiol"
+  ],
+  "author": "Mateusz Sepiol",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/matsepiol/battleship/issues"
+  },
+  "homepage": "https://github.com/matsepiol/battleship#readme"
+}
