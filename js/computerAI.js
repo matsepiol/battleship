@@ -12,11 +12,11 @@ var computerAI = (function() {
         
       if (possiblePositions && possiblePositions.length) {
         var chosenGrid = possiblePositions[Math.floor(Math.random() * (possiblePositions.length))];
-        return document.getElementById('computer-grid').getElementsByClassName(chosenGrid[1] + "-" + chosenGrid[0])[0];
+        return document.getElementById('computer-grid').getElementsByClassName(chosenGrid[1] + '-' + chosenGrid[0])[0];
       }
       else {
         var compGrid = document.getElementById('computer-grid'),
-            randomGrid = compGrid.getElementsByClassName(randomRow + "-" + randomColumn)[0];
+            randomGrid = compGrid.getElementsByClassName(randomRow + '-' + randomColumn)[0];
 
         return randomGrid;
       }
@@ -30,7 +30,7 @@ var computerAI = (function() {
           randomColumn = columnArray[Math.floor(Math.random() * 10)];
 
       grid = document.getElementById('user-grid');
-      randomGrid = grid.getElementsByClassName(randomRow + "-" + randomColumn)[0];
+      randomGrid = grid.getElementsByClassName(randomRow + '-' + randomColumn)[0];
 
       if (randomGrid.classList.contains('alreadyHit', 'grid-num', 'grid-letter')) {
         makeShot();
@@ -44,13 +44,13 @@ var computerAI = (function() {
       var possibleGrid = helper.getPossibleGrid(shotArray);
 
       for (i = possibleGrid.length - 1 ; i >= 0 ; i--) {
-        var pos = grid.getElementsByClassName(possibleGrid[i][1] + "-" + possibleGrid[i][0])[0];
+        var pos = grid.getElementsByClassName(possibleGrid[i][1] + '-' + possibleGrid[i][0])[0];
         if (!pos || pos.classList.contains('alreadyHit') || pos.classList.contains('grid-letter') || pos.classList.contains('grid-num')) {
           possibleGrid.splice(i, 1);
         }
       }
       randomGrid = possibleGrid[Math.floor(Math.random() * (possibleGrid.length))];
-      return document.getElementById('user-grid').getElementsByClassName(randomGrid[1] + "-" + randomGrid[0])[0];
+      return document.getElementById('user-grid').getElementsByClassName(randomGrid[1] + '-' + randomGrid[0])[0];
     }
   };
 

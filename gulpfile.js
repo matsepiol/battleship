@@ -14,14 +14,14 @@ gulp.task('sass', function() {
     .pipe(gulp.dest('./'))
     .pipe(browserSync.reload({
       stream: true
-    }))
+    }));
 });
 
 gulp.task('js', function() {
   return gulp.src('js/main.js')
     .pipe(browserSync.reload({
       stream: true
-    }))
+    }));
 });
 
 gulp.task('watch', ['browserSync', 'sass'], function() {
@@ -34,8 +34,8 @@ gulp.task('browserSync', function() {
     server: {
       baseDir: './'
     },
-    browser: ["firefox"]
-  })
+    browser: ['firefox']
+  });
 });
 
 gulp.task('default', ['watch']);

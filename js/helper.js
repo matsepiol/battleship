@@ -160,7 +160,7 @@ var helper = (function() {
     var grid;
 
     if (isGameOn) {
-      if (computerTurn) {
+      if (opponentTurn) {
         grid = document.getElementById('user-grid');
       }
       else {
@@ -168,7 +168,7 @@ var helper = (function() {
       }
     }
     else {
-      if (computerTurn) {
+      if (opponentTurn) {
         grid = document.getElementById('computer-grid');
       }
       else {
@@ -208,12 +208,28 @@ var helper = (function() {
     }
   };
 
+  var toggleInputEnabling = function() {
+    var inputs = document.getElementsByTagName('input');
+    for (var i = 0 ; i < inputs.length ; i++) {
+      if (inputs[i].disabled === true) {
+        inputs[i].disabled = false;
+        inputs[i].parentNode.classList.remove('disabled');
+      }
+      else {
+        inputs[i].disabled = true;
+        inputs[i].parentNode.classList.add('disabled');
+      }
+    }
+  }
+
+
   return {
     getPossibleGrid: getPossibleGrid,
     getShipSurrounding: getShipSurrounding,
     getActiveBoard: getActiveBoard,
     sortShip: sortShip,
-    getShipOrientation: getShipOrientation
+    getShipOrientation: getShipOrientation,
+    toggleInputEnabling: toggleInputEnabling
   };
 
 })();

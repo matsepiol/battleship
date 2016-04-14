@@ -1,6 +1,6 @@
 .grids {
-  margin: auto;
-  width: 1300px;
+  float: left;
+  width: 1215px;
 }
 
 #user-grid,
@@ -8,15 +8,6 @@
   display: inline-block;
   height: 600px;
   width: 600px;
-}
-
-.grid-element {
-  &.hidden {
-    background-color: transparent;
-    span {
-      display: none;
-    }
-  }
 }
 
 .player-info {
@@ -31,32 +22,32 @@
 
 .options {
   float: left;
-  margin: 10px;
+  margin: 25px;
 
   input[type=radio] {
-    width: 2em;
-    margin: 0;
-    padding: 0;
     font-size: 1em;
+    margin: 0;
     opacity: 0;
+    padding: 0;
+    width: 2em;
   }
 
   input[type=radio] + label {
     display: inline-block;
-    margin-left: -2em;
     line-height: 1.5em;
+    margin-left: -2em;
   }
 
   input[type=radio] + label > span {
-    display: inline-block;
-    width: 0.875em;
-    height: 0.875em;
-    margin: 0.25em 0.5em 0.25em 0.25em;
-    border: 0.0625em solid rgb(192,192,192);
-    border-radius: 0.25em;
     background: rgb(224,224,224);
     background-image: linear-gradient(to bottom, rgb(240,240,240) 50%, rgb(224,224,224) 100%);
+    border: 0.0625em solid rgb(192,192,192);
+    border-radius: 0.25em;
+    display: inline-block;
+    height: 0.875em;
+    margin: 0.25em 0.5em 0.25em 0.25em;
     vertical-align: bottom;
+    width: 0.875em;
   }
 
   input[type=radio]:checked + label > span {
@@ -64,23 +55,30 @@
   }
 
   input[type=radio]:checked + label > span > span {
-    display: block;
-    width: 0.5em;
-    height: 0.5em;
-    margin: 0.125em;
-    border: 0.0625em solid rgb(115,153,77);
-    border-radius: 0.125em;
     background: rgb(153,204,102);
     background-image: linear-gradient(to bottom, rgb(179,217,140) 50%, rgb(0,0,0) 100%);
+    border: 0.0625em solid rgb(115,153,77);
+    border-radius: 0.125em;
+    display: block;
+    height: 0.5em;
+    margin: 0.125em;
+    width: 0.5em;
+  }
+
+  .disabled {
+    input[type=radio]:checked + label > span > span {
+      background: #d3d3d3;
+      background-image: linear-gradient(to bottom, #d3d3d3 50%, rgb(0,0,0) 100%);
+    }
   }
 }
 
 .grid-element {
+  border: 1px solid #d2d2d2;
   float: left;
   height: 50px;
-  width: 50px;
-  border: 1px solid #d2d2d2;
   position: relative;
+  width: 50px;
 
   &.carrier {
     background-color: green;
@@ -102,8 +100,17 @@
     background-color: black;
   }
 
-  &.not-sunk, &.hidden {
+  &.not-sunk,
+  &.hidden {
     background-color: white;
+  }
+
+  &.hidden {
+    background-color: transparent;
+
+    span {
+      display: none;
+    }
   }
 
   .x,
@@ -165,9 +172,9 @@
 
 .confirmation {
   float: left;
-  width: 150px;
   margin: 13% 0 0 5%;
   position: fixed;
+  width: 150px;
 
   &.hidden {
     display: none;

@@ -1,17 +1,12 @@
 .grids {
-  margin: auto;
-  width: 1300px; }
+  float: left;
+  width: 1215px; }
 
 #user-grid,
 #computer-grid {
   display: inline-block;
   height: 600px;
   width: 600px; }
-
-.grid-element.hidden {
-  background-color: transparent; }
-  .grid-element.hidden span {
-    display: none; }
 
 .player-info {
   clear: both;
@@ -22,48 +17,52 @@
 
 .options {
   float: left;
-  margin: 10px; }
+  margin: 25px; }
   .options input[type=radio] {
-    width: 2em;
-    margin: 0;
-    padding: 0;
     font-size: 1em;
-    opacity: 0; }
+    margin: 0;
+    opacity: 0;
+    padding: 0;
+    width: 2em; }
   .options input[type=radio] + label {
     display: inline-block;
-    margin-left: -2em;
-    line-height: 1.5em; }
+    line-height: 1.5em;
+    margin-left: -2em; }
   .options input[type=radio] + label > span {
-    display: inline-block;
-    width: 0.875em;
-    height: 0.875em;
-    margin: 0.25em 0.5em 0.25em 0.25em;
-    border: 0.0625em solid silver;
-    border-radius: 0.25em;
     background: #e0e0e0;
     background-image: -webkit-linear-gradient(top, #f0f0f0 50%, #e0e0e0 100%);
     background-image: linear-gradient(to bottom, #f0f0f0 50%, #e0e0e0 100%);
-    vertical-align: bottom; }
+    border: 0.0625em solid silver;
+    border-radius: 0.25em;
+    display: inline-block;
+    height: 0.875em;
+    margin: 0.25em 0.5em 0.25em 0.25em;
+    vertical-align: bottom;
+    width: 0.875em; }
   .options input[type=radio]:checked + label > span {
     background-image: -webkit-linear-gradient(top, #e0e0e0 50%, #f0f0f0 100%);
     background-image: linear-gradient(to bottom, #e0e0e0 50%, #f0f0f0 100%); }
   .options input[type=radio]:checked + label > span > span {
-    display: block;
-    width: 0.5em;
-    height: 0.5em;
-    margin: 0.125em;
-    border: 0.0625em solid #73994d;
-    border-radius: 0.125em;
     background: #99cc66;
     background-image: -webkit-linear-gradient(top, #b3d98c 50%, black 100%);
-    background-image: linear-gradient(to bottom, #b3d98c 50%, black 100%); }
+    background-image: linear-gradient(to bottom, #b3d98c 50%, black 100%);
+    border: 0.0625em solid #73994d;
+    border-radius: 0.125em;
+    display: block;
+    height: 0.5em;
+    margin: 0.125em;
+    width: 0.5em; }
+  .options .disabled input[type=radio]:checked + label > span > span {
+    background: #d3d3d3;
+    background-image: -webkit-linear-gradient(top, #d3d3d3 50%, black 100%);
+    background-image: linear-gradient(to bottom, #d3d3d3 50%, black 100%); }
 
 .grid-element {
+  border: 1px solid #d2d2d2;
   float: left;
   height: 50px;
-  width: 50px;
-  border: 1px solid #d2d2d2;
-  position: relative; }
+  position: relative;
+  width: 50px; }
   .grid-element.carrier {
     background-color: green; }
   .grid-element.battleship {
@@ -76,6 +75,10 @@
     background-color: black; }
   .grid-element.not-sunk, .grid-element.hidden {
     background-color: white; }
+  .grid-element.hidden {
+    background-color: transparent; }
+    .grid-element.hidden span {
+      display: none; }
   .grid-element .x,
   .grid-element .dot {
     display: block;
@@ -113,9 +116,9 @@
 
 .confirmation {
   float: left;
-  width: 150px;
   margin: 13% 0 0 5%;
-  position: fixed; }
+  position: fixed;
+  width: 150px; }
   .confirmation.hidden {
     display: none; }
 

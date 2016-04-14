@@ -14,7 +14,7 @@ var loadJSON,
     isGameEnded = false,
     opponentScore = 0,
     userScore = 0,
-    computerTurn = false,
+    opponentTurn = false,
     gameType = 'PvC';
 
 var computerAI = window.computerAI,
@@ -28,6 +28,7 @@ var computerAI = window.computerAI,
     if (getJSON.readyState == 4 && getJSON.status == '200') {
       ships = JSON.parse(getJSON.responseText).ships;
       currentShip = ships[0];
+      setDefaultShipsList(ships);
     }
   };
   getJSON.send(null);
@@ -37,17 +38,30 @@ var changeGameType = function(val) {
   gameType = val;
 };
 
+var setDefaultShipsList = function() {
+  var shipsList = document.getElementsByClassName('ship-list')[0];
+
+  for (var i = 0 ; i < ships.length ; i++) {
+    var number = ships[i].number,
+        liItem = shipsList.getElementsByClassName(ships[i].name.toLowerCase());
+
+    for (var j = 0 ; j < liItem.length ; j++) {
+      liItem[j].getElementsByTagName('span')[0].innerHTML = number;
+    }
+  }
+};
+
 // perform putting mark on the board
 var putShip = function(obj) {
   var position = obj.classList[obj.classList.length - 1],
       offset = position.indexOf('-'),
-      row = position.slice(0, offset),
+      row = parseInt(position.slice(0, offset), 10),
       column = position.slice(-1),
       possibleGrid = [],
       pos, el;
 
   if (obj.getElementsByTagName('span').length || obj.getElementsByClassName('dot').length) {
-    if (computerTurn && gameType === 'PvC') {
+    if (opponentTurn && gameType === 'PvC') {
 
       pos = helper.getPossibleGrid(activeShip);
       el = computerAI.generateComputerBoard(pos);
@@ -68,7 +82,7 @@ var putShip = function(obj) {
     var isValid = false;
     possibleGrid = helper.getPossibleGrid(activeShip);
     for (var i = 0 ; i < possibleGrid.length; i++) {
-      if (possibleGrid[i][0] === column && possibleGrid[i][1] == row) {
+      if (possibleGrid[i][0] === column && possibleGrid[i][1] === row) {
         isValid = true;
         break;
       }
@@ -87,20 +101,19 @@ var putShip = function(obj) {
   obj.appendChild(xEl);
   xEl.classList.add('x');
 
-  if (currentShip.size === activeShip.length && (!computerTurn || gameType === 'PvP')) {
+  if (currentShip.size === activeShip.length && (!opponentTurn || gameType === 'PvP')) {
     displayConfirmation();
   }
 
-  if (currentShip.size === activeShip.length && (computerTurn && gameType === 'PvC')) {
+  if (currentShip.size === activeShip.length && (opponentTurn && gameType === 'PvC')) {
     confirmShip(activeShip);
   }
 
-  var inputs = document.getElementsByTagName('input');
-  for (var i = 0 ; i < inputs.length ; i++) {
-    inputs[i].disabled = true;
+  if (!opponentTurn && currentShip && currentShip.size === 5 && activeShip.length === 1) {
+    helper.toggleInputEnabling();
   }
 
-  if (computerTurn && activeShip.length && gameType === 'PvC') {
+  if (opponentTurn && activeShip.length && gameType === 'PvC') {
     pos = helper.getPossibleGrid(activeShip);
     el = computerAI.generateComputerBoard(pos);
     putShip(el);
@@ -114,7 +127,7 @@ var deleteMark = function(column, row) {
       el = grid.getElementsByClassName(row + '-' + column)[0].getElementsByTagName('span')[0];
 
   for (var i = activeShip.length - 1 ; i >= 0; i--) {
-    if (activeShip[i][0] === column && activeShip[i][1] == row) {
+    if (activeShip[i][0] === column && activeShip[i][1] === parseInt(row, 10)) {
       if (i === 0 || i === activeShip.length - 1) { // cannot delete mark inside the ship
         activeShip.splice(i, 1);
         el.parentNode.removeChild(el);
@@ -122,6 +135,11 @@ var deleteMark = function(column, row) {
       }
     }
   }
+
+  if (!opponentTurn && currentShip.size === 5 && !activeShip.length) {
+    helper.toggleInputEnabling();
+  }
+
 };
 
 var displayConfirmation = function() {
@@ -160,20 +178,20 @@ var confirmShip = function() {
         el = document.createElement('span');
         el.classList.add('dot');
         allGrids[i].appendChild(el);
-        if (computerTurn && gameType === 'PvC') allGrids[i].classList.add('hidden');
+        if (opponentTurn && gameType === 'PvC') allGrids[i].classList.add('hidden');
       }
     }
   }
 
-  if (!currentShip && !computerTurn) {
-    computerTurn = true;
+  if (!currentShip && !opponentTurn) {
+    opponentTurn = true;
     shipCount = 0;
     currentShip = ships[0];
     shipsToPut = currentShip.number;
   }
-  if (!currentShip && computerTurn) {
+  if (!currentShip && opponentTurn) {
     computerShips = globalShipsArr.splice(globalShipsArr.length/2, globalShipsArr.length/2);
-    computerTurn = false;
+    opponentTurn = false;
 
     if (gameType === 'PvP') {
       var grid = document.getElementById('computer-grid').getElementsByClassName('grid-element');
@@ -188,11 +206,11 @@ var confirmShip = function() {
     return;
   }
 
-  if (computerTurn && gameType === 'PvC') {
+  if (opponentTurn && gameType === 'PvC') {
     el = computerAI.generateComputerBoard();
     putShip(el);
   }
-  else if (computerTurn && gameType === 'PvP' && currentShip.size === 5) {
+  else if (opponentTurn && gameType === 'PvP' && currentShip.size === 5) {
     var userGrid = document.getElementById('user-grid').getElementsByClassName('grid-element'), 
         i;
 
@@ -214,14 +232,14 @@ var markShipOnBoard = function(activeShip) {
   var i, el, grid;
 
   grid = helper.getActiveBoard();
-console.log(grid); console.log(computerTurn);
+
   for (i = 0 ; i < activeShip.length ; i++) {
     el = grid.getElementsByClassName(activeShip[i][1] + '-' + activeShip[i][0])[0].getElementsByTagName('span')[0];
     el.parentNode.classList.add('ship');
     el.parentNode.classList.add(currentShip.name.toLowerCase());
     el.classList.remove('x');
 
-   if (computerTurn && gameType === 'PvC') el.parentNode.classList.add('hidden');
+   if (opponentTurn && gameType === 'PvC') el.parentNode.classList.add('hidden');
   }
 
   putDotsAroundShip(activeShip);
@@ -251,7 +269,7 @@ var putDotsAroundShip = function(activeShip, isShooting) {
         if (pos && pos.getElementsByTagName('span').length === 0) {
           el.classList.add('dot');
           pos.appendChild(el);
-         if (computerTurn && gameType === 'PvC') el.parentNode.classList.add('hidden');
+         if (opponentTurn && gameType === 'PvC') el.parentNode.classList.add('hidden');
         }
       }
     }
@@ -284,7 +302,7 @@ var startTheGame = function() {
 
 var letOpponentShoot = function() {
   if (isGameOn) {
-    computerTurn = true;
+    opponentTurn = true;
     var pos = computerAI.makeShot();
     fireShot(pos);
   }
@@ -295,7 +313,7 @@ var fireShot = function(obj) {
       el;
 
   if (obj.classList.contains('alreadyHit')) {
-    if (computerTurn && gameType === 'PvC') {
+    if (opponentTurn && gameType === 'PvC') {
 
       pos = computerAI.makeShot();
       fireShot(pos);
@@ -307,7 +325,7 @@ var fireShot = function(obj) {
   }
 
   if (gameType === 'PvP') {
-    if (!computerTurn) {
+    if (!opponentTurn) {
       if (document.getElementById('user-grid').contains(obj)) {
         return;
       }
@@ -322,7 +340,7 @@ var fireShot = function(obj) {
   obj.classList.add('alreadyHit');
   obj.classList.remove('hidden');
 
-  if ((!computerTurn || gameType === 'PvP') && !isGameEnded) {
+  if ((!opponentTurn || gameType === 'PvP') && !isGameEnded) {
     if (obj.classList.contains('ship')) { 
       el = document.createElement('span');
       el.classList.add('x');
@@ -335,7 +353,7 @@ var fireShot = function(obj) {
       letOpponentShoot();
     }
     else {
-      if (isGameOn) computerTurn = !computerTurn;
+      if (isGameOn) opponentTurn = !opponentTurn;
       var playerInfo = document.getElementsByClassName('player-info')[0];
 
       if (playerInfo.classList.contains('player1')) {
@@ -360,7 +378,7 @@ var fireShot = function(obj) {
       hitShip(pos, obj.classList[3]);
     }
 
-    computerTurn = false;
+    opponentTurn = false;
   }
 };
 
@@ -368,11 +386,11 @@ var hitShip = function(position, shipType) {
   var i, j, size,
       ship = [],
       offset = position.indexOf('-'),
-      row = position.substring(0, offset),
+      row = parseInt(position.substring(0, offset), 10),
       column = position.substring(position.length - 1, position.length),
       shipsArr = [];
 
-  if (computerTurn) {
+  if (opponentTurn) {
     shipsArr = globalShipsArr;
   }
   else {
@@ -389,7 +407,7 @@ var hitShip = function(position, shipType) {
     if (shipsArr[i].length === size) {
       ship = shipsArr[i];
       for (j = 0 ; j < ship.length ; j++) {
-        if (ship[j][0] === column && ship[j][1] == row) {
+        if (ship[j][0] === column && ship[j][1] === row) {
           ship[j].hit = true;
           if (!shipsArr[i].hit) {
             ship.hit = 1;
@@ -398,7 +416,7 @@ var hitShip = function(position, shipType) {
             ship.hit++;
           }
           if (ship.hit === ship.length) {
-            if (computerTurn) {
+            if (opponentTurn) {
               opponentScore++;
 
               if (gameType === 'PvC') {
@@ -433,12 +451,34 @@ var hitShip = function(position, shipType) {
 
               window.alert('You destroyed hostile ship!');  
             }
+            updateShipList(ship);
             checkWinningConditions();
           } 
         }
       }
     }
   }
+};
+
+var updateShipList = function(ship) {
+  var shipsList, i, shipName;
+
+  if (opponentTurn) {
+    shipsList = document.getElementsByClassName('player1-ships')[0];
+  }
+  else {
+    shipsList = document.getElementsByClassName('player2-ships')[0];
+  }
+
+  for (i = 0 ; i < ships.length ; i++) {
+    if (ship.length === ships[i].size) {
+      shipName = ships[i].name.toLowerCase();
+    }
+  }
+  
+  var numberEl = shipsList.getElementsByClassName(shipName)[0].getElementsByTagName('span')[0];
+  numberEl.innerHTML = parseInt(numberEl.innerHTML, 10) - 1;
+
 };
 
 var checkWinningConditions = function() {
@@ -471,6 +511,13 @@ var checkWinningConditions = function() {
   }
 };
 
+var handleEvent = function() {
+  var boxEl = document.getElementById('user-grid').getElementsByClassName('grid-element');
+  for (var i = 0 ; i < boxEl.length ; i++) {
+    boxEl[i].addEventListener('click',  function() { putShip(this); });
+  }
+}
+
 // prepare game for a new round, after finishing previous one
 var cleanGame = function() {
   var grids = document.getElementsByClassName('grid-element'),
@@ -483,7 +530,7 @@ var cleanGame = function() {
       for (j = 0 ; j < el.length ; j++) {
         grids[i].removeChild(el[j]);
       }
-      grids[i].classList.remove('alreadyHit', 'ship', 'hidden');
+      grids[i].classList.remove('alreadyHit', 'ship', 'hidden', 'not-sunk');
 
       for (j = 0 ; j < ships.length ; j++) {
         grids[i].classList.remove(ships[j].name.toLowerCase());
@@ -492,11 +539,7 @@ var cleanGame = function() {
   }
 
   document.getElementsByClassName('player-info')[0].classList.add('hidden');
-
-  var inputs = document.getElementsByTagName('input');
-  for (var i = 0 ; i < inputs.length ; i++) {
-    inputs[i].disabled = false;
-  }
+  helper.toggleInputEnabling();
 
   // cleaning game variables
   activeShip = [];
@@ -510,11 +553,11 @@ var cleanGame = function() {
   shipsToPut = null;
   opponentScore = 0;
   userScore = 0;
-  computerTurn = false;
+  opponentTurn = false;
   isGameEnded = false;
 
   computerAI.resetShip();
-
+  setDefaultShipsList();
   // cleaning event listeners
   var computerGrid = document.getElementsByClassName('grids')[0].getElementsByClassName('grid-element');
   for (i = 0 ; i < computerGrid.length ; i++) {
@@ -522,14 +565,7 @@ var cleanGame = function() {
     var newEl = computerGrid[i].cloneNode(true);
     computerGrid[i].parentNode.replaceChild(newEl, computerGrid[i]);
   }
-
-  var boxEl = document.getElementById('user-grid').getElementsByClassName('grid-element');
-  for (var i = 0 ; i < boxEl.length ; i++) {
-    boxEl[i].addEventListener('click',  function() { putShip(this); });
-  }
+  handleEvent();
 };
 
-var boxEl = document.getElementById('user-grid').getElementsByClassName('grid-element');
-for (var i = 0 ; i < boxEl.length ; i++) {
-  boxEl[i].addEventListener('click',  function() { putShip(this); });
-}
+handleEvent();
