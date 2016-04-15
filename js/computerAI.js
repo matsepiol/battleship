@@ -32,7 +32,7 @@ var computerAI = (function() {
       grid = document.getElementById('user-grid');
       randomGrid = grid.getElementsByClassName(randomRow + '-' + randomColumn)[0];
 
-      if (randomGrid.classList.contains('alreadyHit', 'grid-num', 'grid-letter')) {
+      if (randomGrid.classList.contains('alreadyHit') || randomGrid.classList.contains('grid-letter') || randomGrid.classList.contains('grid-num')) {
         makeShot();
       }
       return randomGrid;

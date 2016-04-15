@@ -22,7 +22,7 @@
 
 .options {
   float: left;
-  margin: 25px;
+  margin: 0 25px;
 
   input[type=radio] {
     font-size: 1em;
@@ -155,6 +155,7 @@
 
   &.grid-letter,
   &.grid-num {
+
     span {
       left: 50%;
       position: absolute;

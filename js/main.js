@@ -152,7 +152,7 @@ var displayConfirmation = function() {
 
 var confirmShip = function() {
   var confirm = document.getElementsByClassName('confirmation')[0],
-      el;
+      el, i, grid;
 
   confirm.classList.add('hidden');
 
@@ -171,9 +171,9 @@ var confirmShip = function() {
 
   // filling all remaining grids with dots
   if (!currentShip) {
-    var grid = helper.getActiveBoard();
+    grid = helper.getActiveBoard();
     var allGrids = grid.getElementsByClassName('grid-element');
-    for (var i = 0 ; i < allGrids.length ; i++) {
+    for (i = 0 ; i < allGrids.length ; i++) {
       if (!allGrids[i].getElementsByTagName('span').length) {
         el = document.createElement('span');
         el.classList.add('dot');
@@ -194,9 +194,9 @@ var confirmShip = function() {
     opponentTurn = false;
 
     if (gameType === 'PvP') {
-      var grid = document.getElementById('computer-grid').getElementsByClassName('grid-element');
+      grid = document.getElementById('computer-grid').getElementsByClassName('grid-element');
 
-      for (var i = 0 ; i < grid.length ; i++) {
+      for (i = 0 ; i < grid.length ; i++) {
         if (!grid[i].classList.contains('grid-letter') && !grid[i].classList.contains('grid-num')) {
           grid[i].classList.add('hidden');
         }
@@ -211,8 +211,7 @@ var confirmShip = function() {
     putShip(el);
   }
   else if (opponentTurn && gameType === 'PvP' && currentShip.size === 5) {
-    var userGrid = document.getElementById('user-grid').getElementsByClassName('grid-element'), 
-        i;
+    var userGrid = document.getElementById('user-grid').getElementsByClassName('grid-element');
 
     for (i = 0 ; i < userGrid.length ; i++) {
       if (!userGrid[i].classList.contains('grid-letter') && !userGrid[i].classList.contains('grid-num')) {
@@ -222,7 +221,7 @@ var confirmShip = function() {
 
     window.alert('Now second player turn');
     var boxEl = document.getElementById('computer-grid').getElementsByClassName('grid-element');
-    for (var i = 0 ; i < boxEl.length ; i++) {
+    for (i = 0 ; i < boxEl.length ; i++) {
       boxEl[i].addEventListener('click',  function() { putShip(this); });
     }
   }
@@ -403,6 +402,7 @@ var hitShip = function(position, shipType) {
     }
   }
 
+  // checking is ship is completely destroyed. If so - trigger sunkShip fnc
   for (i = 0 ; i < shipsArr.length ; i++) {
     if (shipsArr[i].length === size) {
       ship = shipsArr[i];
@@ -415,47 +415,89 @@ var hitShip = function(position, shipType) {
           else {
             ship.hit++;
           }
+
           if (ship.hit === ship.length) {
-            if (opponentTurn) {
-              opponentScore++;
-
-              if (gameType === 'PvC') {
-                window.alert('Your ship has beed destroyed!');
-                computerAI.markDestroyedShip(ship);
-                computerAI.resetShip();
-              }
-              else {
-                putDotsAroundShip(ship, true);
-                for (i = 0 ; i < ship.length ; i++) {
-                  var el = document.getElementById('user-grid').getElementsByClassName(ship[i][1] + '-' + ship[i][0])[0],
-                      span = el.getElementsByTagName('span')[1];
-
-                  el.classList.remove('not-sunk');
-                  el.removeChild(span);
-                }
-                window.alert('You destroyed player 1 ship!');
-              }
-
-            }
-            else {
-              userScore++;
-              putDotsAroundShip(ship, true);
-
-              for (i = 0 ; i < ship.length ; i++) {
-                var el = document.getElementById('computer-grid').getElementsByClassName(ship[i][1] + '-' + ship[i][0])[0],
-                    span = el.getElementsByTagName('span')[1];
-
-                el.classList.remove('not-sunk');
-                el.removeChild(span);
-              }
-
-              window.alert('You destroyed hostile ship!');  
-            }
-            updateShipList(ship);
-            checkWinningConditions();
+            sunkShip(ship);
           } 
         }
       }
+    }
+  }
+};
+
+var sunkShip = function(ship) {
+  var i, el, span;
+
+  if (opponentTurn) {
+    opponentScore++;
+
+    if (gameType === 'PvC') {
+      computerAI.markDestroyedShip(ship);
+      computerAI.resetShip();
+    }
+    else {
+      putDotsAroundShip(ship, true);
+      for (i = 0 ; i < ship.length ; i++) {
+        el = document.getElementById('user-grid').getElementsByClassName(ship[i][1] + '-' + ship[i][0])[0];
+        span = el.getElementsByTagName('span')[1];
+
+        el.classList.remove('not-sunk');
+        el.removeChild(span);
+      }
+    }
+  }
+  else {
+    userScore++;
+    putDotsAroundShip(ship, true);
+
+    for (i = 0 ; i < ship.length ; i++) {
+      el = document.getElementById('computer-grid').getElementsByClassName(ship[i][1] + '-' + ship[i][0])[0];
+      span = el.getElementsByTagName('span')[1];
+
+      el.classList.remove('not-sunk');
+      el.removeChild(span);
+    }
+  }
+
+  handleAlerts();
+  updateShipList(ship);
+  checkWinningConditions();
+};
+
+var handleAlerts = function() {
+  // alerts for Player vs. Computer game
+  if (gameType === 'PvC') {
+
+    if (isGameEnded) {
+      if (opponentTurn) {
+        window.alert('You lost!');
+      }
+      else {
+        window.alert('Congratulations! You won!');
+      }
+    }
+    else if (opponentTurn) {
+      window.alert('Your ship has beed destroyed!');
+    }
+    else {
+      window.alert('You destroyed hostile ship!');
+    }
+  }
+  // alerts for Player vs. Player game
+  else if (gameType === 'PvP') {
+    if (isGameEnded) {
+      if (opponentTurn) {
+        window.alert('Player 2 won!');
+      }
+      else {
+        window.alert('Player 1 won!');
+      }
+    }
+    else if (opponentTurn) {
+      window.alert('You destroyed player 1 ship');
+    }
+    else {
+      window.alert('You destroyed player 2 ship!');
     }
   }
 };
@@ -490,23 +532,13 @@ var checkWinningConditions = function() {
   if (opponentScore === shipsToDestroy) {
     isGameEnded = true;
     isGameOn = false;
-    if (gameType === 'PvC') {
-      window.alert('You lost!');
-    }
-    else {
-      window.alert('Player 2 won!');
-    }
+    handleAlerts();
     cleanGame();
   }
   else if (userScore === shipsToDestroy) {
     isGameEnded = true;
     isGameOn = false;
-    if (gameType === 'PvC') {
-      window.alert('Congratulations! You won!');
-    }
-    else {
-      window.alert('Player 1 won!');
-    }
+    handleAlerts();
     cleanGame();
   }
 };
@@ -516,7 +548,7 @@ var handleEvent = function() {
   for (var i = 0 ; i < boxEl.length ; i++) {
     boxEl[i].addEventListener('click',  function() { putShip(this); });
   }
-}
+};
 
 // prepare game for a new round, after finishing previous one
 var cleanGame = function() {
@@ -527,7 +559,7 @@ var cleanGame = function() {
   for (i = 0 ; i < grids.length ; i++) {
     if (!grids[i].classList.contains('grid-letter') && !grids[i].classList.contains('grid-num')) {
       var el = grids[i].getElementsByTagName('span');
-      for (j = 0 ; j < el.length ; j++) {
+      for (j = el.length - 1 ; j >= 0 ; j--) {  
         grids[i].removeChild(el[j]);
       }
       grids[i].classList.remove('alreadyHit', 'ship', 'hidden', 'not-sunk');

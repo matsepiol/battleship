@@ -17,7 +17,7 @@
 
 .options {
   float: left;
-  margin: 25px; }
+  margin: 0 25px; }
   .options input[type=radio] {
     font-size: 1em;
     margin: 0;

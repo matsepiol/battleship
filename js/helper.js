@@ -220,7 +220,7 @@ var helper = (function() {
         inputs[i].parentNode.classList.add('disabled');
       }
     }
-  }
+  };
 
 
   return {
