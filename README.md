@@ -1,1 +1,1 @@
-# battleship game in javascript
+# battleship game written in javascript
